@@ -1,0 +1,50 @@
+<html xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta lang="en">
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <% include includes/vue.ejs %>
+    <% include includes/axios.ejs %>
+    <% include includes/semantic.ejs %>
+    <% include includes/styles.ejs %>
+    <script type="text/javascript">
+        window.onload = function () {
+            new Vue({
+                el: '#app',
+                data() {
+                    return {
+                        id: <%= (id) ? id : 'null' %>
+                    }
+                },
+                mounted() {
+                    console.log(this.id);
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+<div class="ui secondary pointing menu">
+    <a class="item">
+        Dashboard
+    </a>
+    <a class="active item">
+        Employees
+    </a>
+    <a class="item">
+        Sectors
+    </a>
+    <div class="right menu">
+        <a class="ui item">
+            Logout
+        </a>
+    </div>
+</div>
+<div id="app">
+    <div class="ui padded segment">
+        <h2 class="ui header" v-if="id">Modifier l'utilisateur</h2>
+        <h2 class="ui header" v-else>Ajouter un utilisateur</h2>
+    </div>
+</div>
+</body>
+</html>
