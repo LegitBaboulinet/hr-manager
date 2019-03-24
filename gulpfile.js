@@ -13,6 +13,9 @@ gulp.task('compile-ts', function () {
         .pipe(tsProject())
         .pipe(gulp.dest('./dist'));
 });
+gulp.task('run-ts', function () {
+    return run('node ./dist/index.js').exec();
+});
 
 gulp.task('compile-scss', function () {
     return gulp.src('./public/styles/**/*.scss')
@@ -22,6 +25,6 @@ gulp.task('compile-scss', function () {
 });
 
 gulp.task('build', function () {
-    gulp.watch(tsFilesDir, gulp.series('compile-ts'));
+    gulp.watch(tsFilesDir, gulp.series('compile-ts', 'run-ts'));
     gulp.watch(scssFilesDir, gulp.series('compile-scss'));
 });
