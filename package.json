@@ -4,7 +4,8 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "start": "./dist/index.js",
+    "build": "gulp build",
+    "start": "node ./dist/index.js",
     "test": "./dist/test.js"
   },
   "author": "LegitBaboulinet",
@@ -24,6 +25,16 @@
   },
   "devDependencies": {
     "@types/node": "^11.11.6",
+    "gulp": "^4.0.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-csso": "^3.0.1",
+    "gulp-run": "^1.7.1",
+    "gulp-sass": "^4.0.2",
+    "gulp-scss": "^1.4.0",
+    "gulp-typescript": "^5.0.1",
+    "node-sass": "^4.11.0",
+    "sass": "^1.17.3",
+    "scss": "^0.2.4",
     "typescript": "^3.3.4000"
   }
 }
