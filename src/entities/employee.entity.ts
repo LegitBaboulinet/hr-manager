@@ -17,4 +17,7 @@ export class Employee {
 
     @Column({length: 20})
     phone: string;
+
+    @Column({length: 1})
+    gender: string;
 }

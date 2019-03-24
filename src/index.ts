@@ -17,10 +17,15 @@ createConnection()
             // Setting up the server
             app
                 .use(cookieSession({secret: 'randomsecret'})) // TODO: Make the secret a parameter
-                .use(bodyParser.urlencoded({extended: false}));
+                .use(bodyParser.urlencoded({extended: false}))
+                .use('/static', Express.static('./public'))
+                .use('/static/vue', Express.static('./node_modules/vue/dist'))
+                .use('/static/axios', Express.static('./node_modules/axios/dist'))
+                .use('/static/semantic', Express.static('./node_modules/semantic-ui/dist'))
+                .set('view engine', 'ejs');
 
             // Connecting the routes
-            app.use('/employee', employeeRoutes);
+            app.use('/employees', employeeRoutes);
 
             // Start the server
             app.listen(3000, (err: any) => {

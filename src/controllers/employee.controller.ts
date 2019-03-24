@@ -2,8 +2,17 @@ import {Request, Response} from 'express';
 import {getManager, Repository} from "typeorm";
 import {Employee} from "../entities/employee.entity";
 
-export function getAllEmployees(req: Request, res: Response): void {
+export function getAllEmployees(res: Response): void {
     const employeesRepository: Repository<Employee> = getManager().getRepository(Employee);
-    const employees = employeesRepository.find();
-    res.json(employees);
+    employeesRepository.find()
+        .then(
+            (employees: Array<Employee>) => {
+                res.json(employees);
+            }
+        )
+        .catch(
+            (err: string) => {
+                // TODO: Catch the error, you lazy cunt
+            }
+        );
 }

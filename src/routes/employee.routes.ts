@@ -3,8 +3,12 @@ import {Request, Response, Router} from 'express';
 import {getAllEmployees} from "../controllers/employee.controller";
 
 const employeeRoutes = new Router()
+    .get('/', (req: Request, res: Response) => {
+        res.render('employees');
+        //res.render('employees');
+    })
     .get('/all', (req: Request, res: Response) => {
-        getAllEmployees(req, res);
+        getAllEmployees(res);
     });
 
 export = employeeRoutes;

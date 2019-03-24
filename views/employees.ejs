@@ -1,0 +1,67 @@
+<html>
+<head>
+    <meta lang="en">
+    <meta charset="UTF-8">
+    <title>Employees</title>
+    <% include includes/vue.ejs %>
+    <% include includes/axios.ejs %>
+    <% include includes/semantic.ejs %>
+    <script type="text/javascript">
+        window.onload = function () {
+            new Vue({
+                el: '#app',
+                data() {
+                    return {
+                        employees: []
+                    }
+                },
+                mounted() {
+                    axios
+                        .get('/employees/all')
+                        .then(res => this.employees = res.data)
+                        .catch(
+                            err => {
+                                // TODO: Catch the error, you lazy cunt
+                                console.log("Error :");
+                                console.log(err);
+                            }
+                        );
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+<div id="app">
+    <div class="ui container raised segment">
+        <table class="ui celled table">
+            <thead>
+            <tr>
+                <th>Employee</th>
+                <th>Email address</th>
+                <th>Phone number</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="employee in employees">
+                <td>
+                    <h4 class="ui image header">
+                        <img src="/static/images/maleEmployee.png" alt="" class="ui mini rounded image"
+                             v-if="employee.gender === 'M'"/>
+                        <img src="/static/images/femaleEmployee.png" alt="" class="ui mini rounded image"
+                             v-if="employee.gender === 'F'"/>
+                        <div class="content">
+                            {{ employee.firstName }} {{ employee.lastName }}
+                            <div class="sub header">{{ employee.jobDescription }}</div>
+                        </div>
+                    </h4>
+                </td>
+                <td>{{ employee.email }}</td>
+                <td>{{ employee.phone }}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
