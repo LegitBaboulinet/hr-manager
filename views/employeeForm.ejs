@@ -13,17 +13,23 @@
                 el: '#app',
                 data: {
                     employee: <%- JSON.stringify(employee || {}) %>,
-                    errors: []
+                    errors: [],
+                    success: null
                 },
                 methods: {
                     validate: function () {
+                        this.errors = [];
+
+                        // TODO: Check the values before sending them
+
                         // Defining the current mode (creation / modification)
                         if (this.employee.id) {
                             axios
                                 .put('/employees/' + this.employee.id, {employee: this.employee})
                                 .then(() => {
-                                    alert('Successfully edited the employee');
-                                }) // TODO: Create a proper message
+                                    setTimeout(this.goToEmployees, 2000);
+                                    this.success = 'Successfully edited the employee';
+                                })
                                 .catch(() => {
                                     this.errors.push('Unable to edit the employee, please retry later');
                                 });
@@ -31,12 +37,16 @@
                             axios
                                 .post('/employees/new', {employee: this.employee})
                                 .then(() => {
-                                    alert('Successfully created the employee');
-                                }) // TODO: Create a proper message
+                                    setTimeout(this.goToEmployees, 2000);
+                                    this.success = 'Successfully created the employee';
+                                })
                                 .catch(() => {
                                     this.errors.push('Unable to create the employee, please retry later');
                                 });
                         }
+                    },
+                    goToEmployees: function () {
+                        window.location.replace('/employees');
                     }
                 }
             });
@@ -61,7 +71,19 @@
     </div>
 </div>
 <div id="app">
-    <div class="ui padded container segment">
+    <div class="ui padded container clearing segment">
+
+
+        <div class="ui breadcrumb">
+            <a class="section" href="/employees">Employees</a>
+            <span class="divider">/</span>
+            <div class="active section" v-if="employee.id">Edit the employee details</div>
+            <div class="active section" v-else>Create a new employee</div>
+        </div>
+
+        <div class="ui positive message" v-if="success && success.trim().length > 0">
+            <div class="header">{{ success }}</div>
+        </div>
 
         <div class="ui negative message" v-if="errors.length > 0">
             <div class="header">Could not validate the form</div>
@@ -70,17 +92,17 @@
             </ul>
         </div>
 
-        <h2 class="ui header" v-if="employee">Edit the employee details</h2>
+        <h2 class="ui header" v-if="employee.id">Edit the employee details</h2>
         <h2 class="ui header" v-else>Create a new employee</h2>
 
         <form class="ui form">
             <div class="field">
                 <label>First name</label>
-                <input type="text" v-model="employee.firstName" maxlength="35"/>
+                <input type="text" v-model="employee.firstName" maxlength="35" required/>
             </div>
             <div class="field">
                 <label>Last name</label>
-                <input type="text" v-model="employee.lastName" maxlength="35"/>
+                <input type="text" v-model="employee.lastName" maxlength="35" required/>
             </div>
             <div class="field">
                 <label>Email address</label>
@@ -88,7 +110,7 @@
             </div>
             <div class="field">
                 <label>Phone number</label>
-                <input type="text" v-model="employee.phoneNumber" maxlength="10"/>
+                <input type="text" v-model="employee.phoneNumber" maxlength="12"/>
             </div>
             <div class="field">
                 <label>Job description</label>
@@ -109,9 +131,13 @@
                     </div>
                 </div>
             </div>
-            <div class="ui teal button" v-on:click="validate()">
+            <div class="ui right floated teal button" v-on:click="validate()">
                 <i class="check icon"></i>
                 Validate
+            </div>
+            <div class="ui right floated button" v-on:click="goToEmployees()">
+                <i class="times icon"></i>
+                Cancel
             </div>
         </form>
     </div>

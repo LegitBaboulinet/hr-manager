@@ -1,7 +1,7 @@
 import {Request, Response} from 'express';
 
 export function error400(req: Request, res: Response, values: Array<String> = [], msg: string = null): void {
-    req.statusCode = 400;
+    res.status(400);
     if (!msg) {
         msg = 'La requête n\'est pas correcte';
     }
@@ -20,21 +20,21 @@ export function error400(req: Request, res: Response, values: Array<String> = []
 }
 
 export function error401(req: Request, res: Response): void {
-    req.statusCode = 401;
+    res.status(401);
     res.json({
         msg: 'Veuillez vous authentifier'
     });
 }
 
 export function error403(req: Request, res: Response): void {
-    req.statusCode = 403;
+    res.status(403);
     res.json({
         msg: 'Vous n\'avez pas l\'accès à cette route'
     });
 }
 
 export function error404(req: Request, res: Response, HTMLresponse: boolean = false): void {
-    req.statusCode = 404;
+    res.status(404);
     if (HTMLresponse) {
         res.render('404');
     } else {
@@ -45,7 +45,7 @@ export function error404(req: Request, res: Response, HTMLresponse: boolean = fa
 }
 
 export function error500(req: Request, res: Response): void {
-    req.statusCode = 500;
+    res.status(500);
     res.json({
         msg: 'Une erreur inattendue s\'est produite'
     });

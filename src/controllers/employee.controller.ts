@@ -64,6 +64,7 @@ export function createEmployee(req: Request, res: Response): void {
             )
             .catch(
                 (err: string) => {
+                    console.log('oui');
                     error400(req, res);
                 }
             );
@@ -74,8 +75,6 @@ export function createEmployee(req: Request, res: Response): void {
 
 export function editEmployee(req: Request, res: Response): void {
     const employeesRepository: Repository<Employee> = getManager().getRepository(Employee);
-
-    console.log((req.body.employee.genderType === 'M' || req.body.employee.genderType === 'F'));
 
     if (req.body.employee) {
         Joi.validate(req.body.employee, employeeSchema)
@@ -101,7 +100,6 @@ export function editEmployee(req: Request, res: Response): void {
                                         )
                                         .catch(
                                             (err: string) => {
-                                                console.log('err', err);
                                                 error500(req, res);
                                             }
                                         );
