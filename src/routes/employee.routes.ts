@@ -7,7 +7,7 @@ const employeeRoutes = new Router()
         res.send('<h1>Hello world</h1>')
     })
     .get('/all', (req: Request, res: Response) => {
-        getAllEmployees(res);
+        getAllEmployees(req, res);
     })
     .post('/new', (req: Request, res: Response) => {
         createEmployee(req, res);

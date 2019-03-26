@@ -2,6 +2,7 @@ import {Request, Response} from 'express';
 import {getManager, Repository} from "typeorm";
 import * as Joi from 'joi';
 import {Employee} from "../entities/employee.entity";
+import {error400, error404, error500} from "./error.controller";
 
 const employeeSchema = Joi.object().keys({
     id: Joi.number().integer().min(1),
@@ -13,7 +14,7 @@ const employeeSchema = Joi.object().keys({
     jobDescription: Joi.string().min(0).max(255)
 });
 
-export function getAllEmployees(res: Response): void {
+export function getAllEmployees(req: Request, res: Response): void {
     const employeesRepository: Repository<Employee> = getManager().getRepository(Employee);
     employeesRepository.find({order: {lastName: 'ASC', firstName: 'ASC'}})
         .then(
@@ -22,8 +23,8 @@ export function getAllEmployees(res: Response): void {
             }
         )
         .catch(
-            (err: string) => {
-                // TODO: Catch the error, you lazy cunt
+            () => {
+                error500(req, res);
             }
         );
 }
@@ -53,23 +54,21 @@ export function createEmployee(req: Request, res: Response): void {
                             )
                             .catch(
                                 (err: string) => {
-                                    console.log('err', err);
-                                    // TODO: Catch the error, you lazy cunt
+                                    error500(req, res);
                                 }
                             );
                     } else {
-                        // TODO: Catch the error, you lazy cunt
+                        error400(req, res);
                     }
                 }
             )
             .catch(
                 (err: string) => {
-                    console.log('nope', err);
-                    // TODO: Catch the error, you lazy cunt
+                    error400(req, res);
                 }
             );
     } else {
-        // TODO: Catch the error, you lazy cunt
+        error400(req, res);
     }
 }
 
@@ -103,31 +102,28 @@ export function editEmployee(req: Request, res: Response): void {
                                         .catch(
                                             (err: string) => {
                                                 console.log('err', err);
-                                                // TODO: Catch the error, you lazy cunt
+                                                error500(req, res);
                                             }
                                         );
                                 }
                             )
                             .catch(
                                 (err: string) => {
-                                    console.log('err', err);
-                                    // TODO: Catch the error, you lazy cunt
+                                    error400(req, res);
                                 }
                             );
                     } else {
-                        console.log('err');
-                        // TODO: Catch the error, you lazy cunt
+                        error400(req, res);
                     }
                 }
             )
             .catch(
                 (err: string) => {
-                    console.log('nope', err);
-                    // TODO: Catch the error, you lazy cunt
+                    error400(req, res);
                 }
             );
     } else {
-        // TODO: Catch the error, you lazy cunt
+        error400(req, res);
     }
 }
 
@@ -141,16 +137,16 @@ export function viewEditEmployee(req: Request, res: Response): void {
                     if (employee) {
                         res.render('employeeForm', {employee: employee});
                     } else {
-                        // TODO: Catch the error, you lazy cunt
+                        error404(req, res, true);
                     }
                 }
             )
             .catch(
-                (err: string) => {
-                    // TODO: Catch the error, you lazy cunt
+                () => {
+                    error404(req, res, true);
                 }
             );
     } else {
-        // TODO: Catch the error, you lazy cunt
+        error404(req, res, true);
     }
 }
