@@ -1,4 +1,4 @@
-<html xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<html xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
 <head>
     <meta lang="en">
     <meta charset="UTF-8">
@@ -11,13 +11,33 @@
         window.onload = function () {
             new Vue({
                 el: '#app',
-                data() {
-                    return {
-                        id: <%= (id) ? id : 'null' %>
-                    }
+                data: {
+                    employee: <%- JSON.stringify(employee || {}) %>,
+                    errors: []
                 },
-                mounted() {
-                    console.log(this.id);
+                methods: {
+                    validate: function () {
+                        // Defining the current mode (creation / modification)
+                        if (this.employee.id) {
+                            axios
+                                .put('/employees/' + this.employee.id, {employee: this.employee})
+                                .then(() => {
+                                    alert('Successfully edited the employee');
+                                }) // TODO: Create a proper message
+                                .catch(() => {
+                                    this.errors.push('Unable to edit the employee, please retry later');
+                                });
+                        } else {
+                            axios
+                                .post('/employees/new', {employee: this.employee})
+                                .then(() => {
+                                    alert('Successfully created the employee');
+                                }) // TODO: Create a proper message
+                                .catch(() => {
+                                    this.errors.push('Unable to create the employee, please retry later');
+                                });
+                        }
+                    }
                 }
             });
         }
@@ -41,9 +61,59 @@
     </div>
 </div>
 <div id="app">
-    <div class="ui padded segment">
-        <h2 class="ui header" v-if="id">Modifier l'utilisateur</h2>
-        <h2 class="ui header" v-else>Ajouter un utilisateur</h2>
+    <div class="ui padded container segment">
+
+        <div class="ui negative message" v-if="errors.length > 0">
+            <div class="header">Could not validate the form</div>
+            <ul>
+                <li v-for="error in errors">{{ error }}</li>
+            </ul>
+        </div>
+
+        <h2 class="ui header" v-if="employee">Edit the employee details</h2>
+        <h2 class="ui header" v-else>Create a new employee</h2>
+
+        <form class="ui form">
+            <div class="field">
+                <label>First name</label>
+                <input type="text" v-model="employee.firstName" maxlength="35"/>
+            </div>
+            <div class="field">
+                <label>Last name</label>
+                <input type="text" v-model="employee.lastName" maxlength="35"/>
+            </div>
+            <div class="field">
+                <label>Email address</label>
+                <input type="email" v-model="employee.emailAddress" maxlength="50"/>
+            </div>
+            <div class="field">
+                <label>Phone number</label>
+                <input type="text" v-model="employee.phoneNumber" maxlength="10"/>
+            </div>
+            <div class="field">
+                <label>Job description</label>
+                <textarea cols="30" rows="5" v-model="employee.jobDescription" maxlength="255"></textarea>
+            </div>
+            <div class="inline fields">
+                <label for="fruit">Gender:</label>
+                <div class="field">
+                    <div class="ui radio checkbox">
+                        <input type="radio" v-model="employee.genderType" value="M" name="gender"/>
+                        <label>Man</label>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui radio checkbox">
+                        <input type="radio" v-model="employee.genderType" value="F" name="gender"/>
+                        <label>Woman</label>
+                    </div>
+                </div>
+            </div>
+            <div class="ui teal button" v-on:click="validate()">
+                <i class="check icon"></i>
+                Validate
+            </div>
+        </form>
     </div>
 </div>
 </body>

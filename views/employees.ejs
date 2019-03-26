@@ -11,10 +11,8 @@
         window.onload = function () {
             new Vue({
                 el: '#app',
-                data() {
-                    return {
-                        employees: null
-                    }
+                data: {
+                    employees: null
                 },
                 mounted() {
                     axios
@@ -50,7 +48,7 @@
     </div>
 </div>
 <div id="app">
-    <div class="ui padded segment" v-bind:class="{ loading: !employees }">
+    <div class="ui padded container segment" v-bind:class="{ loading: !employees }">
         <h2 class="ui header">Employees</h2>
         <table class="ui celled table">
             <thead>
@@ -65,17 +63,21 @@
                 <td>
                     <h4 class="ui image header">
                         <img src="/static/images/maleEmployee.png" alt="" class="ui mini rounded image"
-                             v-if="employee.gender === 'M'"/>
+                             v-if="employee.genderType === 'M'"/>
                         <img src="/static/images/femaleEmployee.png" alt="" class="ui mini rounded image"
-                             v-if="employee.gender === 'F'"/>
+                             v-if="employee.genderType === 'F'"/>
                         <div class="content">
-                            {{ employee.firstName }} {{ employee.lastName }}
+                            <a v-bind:href="'employees/' + employee.id">
+                                {{ employee.lastName }} {{ employee.firstName }}
+                            </a>
                             <div class="sub header">{{ employee.jobDescription }}</div>
                         </div>
                     </h4>
                 </td>
-                <td>{{ employee.email }}</td>
-                <td>{{ employee.phone }}</td>
+                <td v-if="employee.emailAddress">{{ employee.emailAddress }}</td>
+                <td v-if="!employee.emailAddress"><i>No email address</i></td>
+                <td v-if="employee.phoneNumber">{{ employee.phoneNumber }}</td>
+                <td v-if="!employee.phoneNumber"><i>No phone number</i></td>
             </tr>
             </tbody>
         </table>

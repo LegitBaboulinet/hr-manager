@@ -6,21 +6,21 @@ export class Employee {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({length: 35})
+    @Column('varchar', {length: 35})
     firstName: string;
 
-    @Column({length: 35})
+    @Column('varchar', {length: 35})
     lastName: string;
 
-    @Column({length: 50, nullable: true})
-    email: string;
+    @Column('varchar', {length: 50, nullable: true})
+    emailAddress: string;
 
-    @Column({length: 20, nullable: true})
-    phone: string;
+    @Column('varchar', {length: 12, nullable: true})
+    phoneNumber: string;
 
-    @Column({length: 1})
-    gender: string;
+    @Column('char', {length: 1, nullable: true})
+    genderType: string;
 
-    @Column({length: 255, nullable: true})
+    @Column('varchar', {length: 255, nullable: true})
     jobDescription: string;
 }
