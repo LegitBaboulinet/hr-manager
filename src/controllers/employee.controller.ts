@@ -64,7 +64,6 @@ export function createEmployee(req: Request, res: Response): void {
             )
             .catch(
                 (err: string) => {
-                    console.log('oui');
                     error400(req, res);
                 }
             );
